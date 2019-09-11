@@ -1,10 +1,17 @@
 const router = require("express").Router();
+const passport = require('passport');
+
+const { createTask } = require('../controllers/tasks/index');
+
+const passportCheck = passport.authenticate("jwt", {
+  session: false
+});
 
 router
-  .get("/tasks")
-  .get("/tasks/:id")
-  .post("/tasks")
-  .patch("/tasks/:id")
-  .delete("/tasks/:id");
+  .get("/")
+  .get("/:id")
+  .post("/", passportCheck, createTask)
+  .patch("/:id")
+  .delete("/:id");
 
 module.exports = router;

@@ -8,10 +8,9 @@ var goalsSchema = new mongoose.Schema(
       required: true
     },
     description: {
-      type: String,
-      required: true
+      type: String
     },
-    scrore: {
+    points: {
       type: Number,
       required: true
     },

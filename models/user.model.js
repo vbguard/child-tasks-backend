@@ -47,7 +47,7 @@ const UserSchema = new mongoose.Schema(
         ref: "Tasks"
       }
     ],
-    scores: {
+    score: {
       type: Number,
       default: 0
     },
