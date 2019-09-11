@@ -8,12 +8,10 @@ var tasksSchema = new mongoose.Schema(
       required: true
     },
     description: {
-      type: String,
-      required: true
+      type: String
     },
-    scrore: {
-      type: Number,
-      required: true
+    points: {
+      type: Number
     },
     isDone: {
       type: Boolean,
@@ -23,7 +21,7 @@ var tasksSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users"
     },
-    deadLine: {
+    deadline: {
       type: String,
       enum: [
         "8.00-10.00",

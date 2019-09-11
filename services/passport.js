@@ -1,6 +1,5 @@
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../models/user.model");
-
 const config = require("../config/config");
 
 // const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -45,7 +44,6 @@ module.exports = function(passport) {
           },
           { facebookId: 0, googleId: 0 }
         )
-
           .then(user => {
             console.log("localSTR :", user);
 
@@ -61,28 +59,43 @@ module.exports = function(passport) {
                 });
               }
 
-              const token = user.getJWT();
-
-              user.populate("goals").populate("tasks");
-
-              const userData = {
-                user: {
-                  name: user.name,
-                  age: user.age,
-                  email: user.email,
-                  isChild: user.isChild
-                },
-                goals: user.goals,
-                tasks: user.tasks,
-                token
-              };
-
-              // Добавить тут популяцию
-
               if (isMatch && !err) {
-                return cb(null, userData, {
-                  message: "Logged In Successfully"
-                });
+                const token = user.getJWT();
+
+                User.populate(user, [
+                  {
+                    path: "goals",
+                    model: "Goals",
+                    select: { userId: 0, __v: 0, updatedAt: 0 }
+                  },
+                  {
+                    path: "tasks",
+                    model: "Tasks",
+                    select: { userId: 0, __v: 0, updatedAt: 0 }
+                  }
+                ])
+                  .then(result => {
+                    console.log('result', result)
+                    const userData = {
+                      user: {
+                        name: result.name,
+                        age: result.age,
+                        email: result.email,
+                        isChild: result.isChild
+                      },
+                      goals: result.goals,
+                      tasks: result.tasks,
+                      token
+                    };
+
+                    return cb(null, userData, {
+                      message: "Logged In Successfully"
+                    });
+                  })
+                  .catch(err => {
+                    console.log(err.message)
+                    return cb(err);
+                  });
               }
             });
           })
