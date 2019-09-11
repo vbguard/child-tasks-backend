@@ -16,13 +16,14 @@ const PORT = config.PORT;
 
 const mode = process.env.NODE_ENV || "development";
 
-mongoose.connect(
-  config.MONGO_DB_URL,
-  { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true },
-  () => {
-    console.log("DB Connected...");
-  }
-);
+mongoose
+  .connect(config.MONGO_DB_URL, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+  })
+  .then(() => console.log("DB Connected..."))
+  .catch(err => console.log(err));
 
 if (mode) {
   app.use(logger("dev"));
@@ -33,8 +34,11 @@ app
   .use(express.urlencoded({ extended: false, limit: "2mb" }))
 
   .use(passport.initialize())
-  .use(passport.session())
+  .use(passport.session());
 
+require("./services/passport")(passport);
+
+app
   .use("/api", router)
   .use("/*", notFound)
 
