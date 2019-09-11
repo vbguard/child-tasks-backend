@@ -11,8 +11,8 @@ module.exports = {
   GOOGLE_CB_URL: `${
     mode ? this.SERVER_URL_PROD : this.SERVER_URL_LOCAL
   }/auth/google/callback`,
-  FACEBOOK_APP_ID: "3064327346927742",
-  FACEBOOK_APP_SECRET: "8a52320db7bf759109b418377fb88c27",
+  FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
+  FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET,
   FACEBOOK_CB_URL: `${
     mode ? this.SERVER_URL_PROD : this.SERVER_URL_LOCAL
   }/auth/facebook/callback`
