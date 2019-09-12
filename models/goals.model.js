@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"); // Erase if already required
 
 // Declare the Schema of the Mongo model
-var goalsSchema = new mongoose.Schema(
+var GoalsSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -26,5 +26,16 @@ var goalsSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+GoalsSchema.methods.getPublicFields = function() {
+  const returnObject = {
+    title: this.title,
+    description: this.description,
+    points: this.points,
+    isDone: this.isDone,
+    createdAt: this.createdAt
+  };
+  return returnObject;
+};
+
 //Export the model
-module.exports = mongoose.model("Goals", goalsSchema);
+module.exports = mongoose.model("Goals", GoalsSchema);
