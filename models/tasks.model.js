@@ -51,7 +51,8 @@ TasksSchema.methods.getPublicFields = function() {
     isDone: this.isDone,
     createdAt: this.createdAt,
     deadline: this.deadline,
-    isBlocked: this.isBlocked
+    isBlocked: this.isBlocked,
+    _id: this.id
   };
   return returnObject;
 };
