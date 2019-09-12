@@ -11,10 +11,8 @@ const getAllUserTasks = (req, res) => {
     });
   };
 
-  Tasks.find({ userId })
-    .then(tasks => {
-      sendResponse(tasks);
-    })
+  Tasks.find({ userId }, { __v: 0, updatedAt: 0, userId: 0 })
+    .then(sendResponse)
     .catch(err => {
       throw new ValidationError(err.message);
     });

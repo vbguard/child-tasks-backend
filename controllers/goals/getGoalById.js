@@ -27,7 +27,7 @@ const getGoalById = (req, res) => {
         sendError({ message: "no such goal" });
         return;
       }
-      sendResponse(goal);
+      sendResponse(goal.getPublicFields());
     })
     .catch(err => {
       throw new ValidationError(err.message);

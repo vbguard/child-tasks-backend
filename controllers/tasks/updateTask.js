@@ -49,16 +49,12 @@ const updateTask = (req, res) => {
   };
 
   Tasks.findByIdAndUpdate(taskId, { $set: newData }, { new: true })
-    .lean()
     .then(task => {
       if (!task) {
         sendError({ message: "no such task" });
         return;
       }
-      delete task.__v;
-      delete task.userId;
-
-      sendResponse(task);
+      sendResponse(task.getPublicFields());
     })
     .catch(err => {
       throw new ValidationError(err.message);

@@ -17,6 +17,8 @@ module.exports = function(passport) {
   passport.use(
     new JwtStrategy(opts, function(jwt_payload, done) {
       User.findOne({ _id: jwt_payload.id }, function(err, user) {
+        // console.log("\x1b[7m\x1b[33m%s\x1b[0m", "jwt_payload", jwt_payload); //yellow
+
         if (err) {
           return done(err, false);
         }
@@ -45,7 +47,7 @@ module.exports = function(passport) {
           { facebookId: 0, googleId: 0 }
         )
           .then(user => {
-            console.log("localSTR :", user);
+            // console.log("localSTR :", user);
 
             if (!user) {
               return cb(null, false, {
@@ -75,8 +77,6 @@ module.exports = function(passport) {
                   }
                 ])
                   .then(result => {
-                    console.log("result", result);
-
                     const userData = {
                       userData: {
                         name: result.name,

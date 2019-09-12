@@ -48,16 +48,12 @@ const updateGoal = (req, res) => {
   };
 
   Goals.findByIdAndUpdate(goalId, { $set: newData }, { new: true })
-    .lean()
     .then(goal => {
       if (!goal) {
         sendError({ message: "no such goal" });
         return;
       }
-      delete goal.__v;
-      delete goal.userId;
-
-      sendResponse(goal);
+      sendResponse(goal.getPublicFields());
     })
     .catch(err => {
       throw new ValidationError(err.message);
