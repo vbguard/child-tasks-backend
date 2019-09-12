@@ -5,6 +5,8 @@ const { ValidationError } = require("../../core/error");
 
 // Register New User and Check this email have in DB
 const userSignup = (req, res) => {
+  const { email, password, name, age } = req.body;
+
   const schema = Joi.object()
     .keys({
       email: Joi.string().regex(
@@ -17,7 +19,7 @@ const userSignup = (req, res) => {
         .min(3)
         .max(16),
       age: Joi.number()
-        .min(1)
+        .min(3)
         .max(99)
     })
     .options({
@@ -41,22 +43,19 @@ const userSignup = (req, res) => {
     });
   };
 
-  if (!req.body.email || !req.body.password) {
-    sendError({ message: "Please enter email and password." });
-    return;
-  } else {
-    const newUser = new User({
-      email: req.body.email,
-      password: req.body.password
-    });
+  const newUser = new User({
+    email,
+    password,
+    name,
+    age
+  });
 
-    newUser
-      .save()
-      .then(() => {
-        login(req, res);
-      })
-      .catch(sendError);
-  }
+  newUser
+    .save()
+    .then(() => {
+      login(req, res);
+    })
+    .catch(sendError);
 };
 
 module.exports = userSignup;
