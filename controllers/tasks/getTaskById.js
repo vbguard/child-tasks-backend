@@ -28,7 +28,7 @@ const getTaskById = (req, res) => {
         sendError({ message: "no such task" });
         return;
       }
-      sendResponse(task);
+      sendResponse(task.getPublicFields());
     })
     .catch(err => {
       throw new ValidationError(err.message);

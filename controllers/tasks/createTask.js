@@ -35,10 +35,20 @@ const createTask = async (req, res) => {
     throw new ValidationError(result.error.message);
   }
 
+  const { _id } = req.user;
+
   const sendResponse = task => {
     res.json({
       status: "success",
       task
+    });
+  };
+
+  const sendError = error => {
+    const errMessage = error.message || "must handle error message";
+    res.json({
+      status: "error",
+      message: errMessage
     });
   };
 
@@ -49,20 +59,23 @@ const createTask = async (req, res) => {
     deadline: req.body.deadline
   });
 
-  User.findByIdAndUpdate(req.user._id, { $push: { tasks: newTask._id } })
+  User.findByIdAndUpdate(_id, { $push: { tasks: newTask._id } })
     .then(updatedUser => {
-      if (updatedUser) {
-        newTask
-          .save()
-          .then(task => {
-            if (task) {
-              sendResponse(task.getPublicFields());
-            }
-          })
-          .catch(err => {
-            throw new ValidationError(err.message);
-          });
+      if (!updatedUser) {
+        sendError();
+        return;
       }
+
+      newTask
+        .save()
+        .then(task => {
+          if (task) {
+            sendResponse(task.getPublicFields());
+          }
+        })
+        .catch(err => {
+          throw new ValidationError(err.message);
+        });
     })
     .catch(err => {
       throw new ValidationError(err.message);

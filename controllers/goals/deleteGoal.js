@@ -13,8 +13,20 @@ const deleteGoal = (req, res) => {
     });
   };
 
+  const sendError = error => {
+    const errMessage =
+      error.message || "must handle this error on registration";
+    res.json({
+      status: "error",
+      error: errMessage
+    });
+  };
+
   Goals.findByIdAndDelete({ userId, _id: goalId })
-    .then(() => {
+    .then(goal => {
+      if (!goal) {
+        sendError({ message: "No such goal" });
+      }
       User.findByIdAndUpdate(userId, { $pull: { goals: goalId } })
         .then(() => sendResponse())
         .catch(err => {

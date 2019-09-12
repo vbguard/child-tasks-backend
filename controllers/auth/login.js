@@ -32,12 +32,11 @@ const userLogin = (req, res) => {
     });
   };
 
-  const sendError = (error, user) => {
+  const sendError = error => {
     const errMessage = error.message || "must handle this error on login";
     res.status(400).json({
       status: "error",
-      error: errMessage,
-      user
+      error: errMessage
     });
   };
 
@@ -48,11 +47,10 @@ const userLogin = (req, res) => {
     },
     (err, user, info) => {
       if (err || !user) {
-        const infoMessage = info ? info.message : { message: "Login failed" };
-        sendError(infoMessage, user);
+        const infoMessage = info ? info : { message: "Login failed" };
+        sendError(infoMessage);
         return;
       }
-
       req.login(
         user,
         {
@@ -62,8 +60,7 @@ const userLogin = (req, res) => {
           if (err) {
             res.send(err);
           }
-
-          return sendResponse(user);
+          sendResponse(user);
         }
       );
     }

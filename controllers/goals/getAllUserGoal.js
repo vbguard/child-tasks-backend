@@ -11,7 +11,7 @@ const getAllUserGoal = (req, res) => {
     });
   };
 
-  Goals.find({ userId })
+  Goals.find({ userId }, { __v: 0, updatedAt: 0, userId: 0 })
     .then(goals => {
       sendResponse(goals);
     })

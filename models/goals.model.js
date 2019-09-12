@@ -32,7 +32,8 @@ GoalsSchema.methods.getPublicFields = function() {
     description: this.description,
     points: this.points,
     isDone: this.isDone,
-    createdAt: this.createdAt
+    createdAt: this.createdAt,
+    _id: this._id
   };
   return returnObject;
 };

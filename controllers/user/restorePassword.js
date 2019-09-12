@@ -24,7 +24,7 @@ const restorePassword = async (req, res) => {
     throw new ValidationError(result.error.message);
   }
 
-  const email = req.body.email;
+  const { email } = req.body;
 
   const newPassword = Math.random()
     .toString(36)
