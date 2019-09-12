@@ -13,7 +13,7 @@ const passportCheck = passport.authenticate("jwt", {
 router
   .use("/auth", authRouter)
   .use("/goals", passportCheck, goalsRouter)
-  .use("/tasks", tasksRouter)
+  .use("/tasks", passportCheck, tasksRouter)
   .use("/user", userRouter);
 
 module.exports = router;
