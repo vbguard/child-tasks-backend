@@ -1,10 +1,11 @@
 const router = require("express").Router();
+const { restorePassword } = require("../controllers/user");
 
 router
-  .post("/user/:id")
-  .get("/user/:id")
-  .delete("/user/:id")
-  .put("/user/:id")
-  .post("/user/restore");
+  .post("/:id")
+  .get("/:id")
+  .delete("/:id")
+  .put("/:id")
+  .post("/restore", restorePassword);
 
 module.exports = router;
