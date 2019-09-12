@@ -16,7 +16,7 @@ module.exports = function(passport) {
 
   passport.use(
     new JwtStrategy(opts, function(jwt_payload, done) {
-      User.findOne({ id: jwt_payload.sub }, function(err, user) {
+      User.findOne({ _id: jwt_payload.id }, function(err, user) {
         if (err) {
           return done(err, false);
         }
@@ -75,7 +75,7 @@ module.exports = function(passport) {
                   }
                 ])
                   .then(result => {
-                    console.log('result', result)
+                    console.log("result", result);
                     const userData = {
                       user: {
                         name: result.name,
@@ -93,7 +93,7 @@ module.exports = function(passport) {
                     });
                   })
                   .catch(err => {
-                    console.log(err.message)
+                    console.log(err.message);
                     return cb(err);
                   });
               }

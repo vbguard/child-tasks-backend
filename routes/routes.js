@@ -1,15 +1,19 @@
 const router = require("express").Router();
+const passport = require("passport");
 
 const authRouter = require("./auth.router");
 const goalsRouter = require("./goals.router");
 const tasksRouter = require("./tasks.router");
 const userRouter = require("./user.router");
 
+const passportCheck = passport.authenticate("jwt", {
+  session: false
+});
+
 router
   .use("/auth", authRouter)
-  .use("/goals", goalsRouter)
+  .use("/goals", passportCheck, goalsRouter)
   .use("/tasks", tasksRouter)
   .use("/user", userRouter);
-
 
 module.exports = router;

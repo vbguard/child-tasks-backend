@@ -1,5 +1,5 @@
 require("dotenv").config();
-require('./core/express-promise');
+require("./core/express-promise");
 const express = require("express");
 const app = express();
 const config = require("./config/config.js");
@@ -7,7 +7,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const passport = require("passport");
 
-const { ValidationError } = require('./core/error');
+const { ValidationError } = require("./core/error");
 
 const validationErrorHandler = require("./middleware/validation-error-handler");
 const errorHandler = require("./middleware/error-handler");
@@ -44,13 +44,13 @@ require("./services/passport")(passport);
 app
   .use("/api", router)
   .use("*", notFound)
-  
+
   // add error handlers
   .use((err, req, res, next) => {
     if (err instanceof ValidationError) {
       return res.status(400).json({ message: err.message });
     }
-  
+
     next(err);
   })
   .use(validationErrorHandler)

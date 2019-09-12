@@ -1,8 +1,32 @@
 const passport = require("passport");
+const Joi = require("joi");
+const { ValidationError } = require("../../core/error");
 
 // Login User and get him Token for access to some route action
 const userLogin = (req, res) => {
   console.log("userLogin");
+
+  const schema = Joi.object()
+    .keys({
+      email: Joi.string().regex(
+        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+      ),
+      password: Joi.string()
+        .min(6)
+        .max(16)
+    })
+    .options({
+      presence: "required",
+      stripUnknown: true,
+      abortEarly: false
+    });
+
+  const result = schema.validate(req.body);
+
+  if (result.error) {
+    throw new ValidationError(result.error.message);
+  }
+
   passport.authenticate(
     "local",
     {

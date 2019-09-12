@@ -1,17 +1,18 @@
 const router = require("express").Router();
-const passport = require('passport');
 
-const { createGoal, getAllUserGoals } = require('../controllers/goals/index');
-
-const passportCheck = passport.authenticate("jwt", {
-  session: false
-});
+const {
+  createGoal,
+  getAllUserGoals,
+  deleteGoal,
+  updateGoal,
+  getGoalById
+} = require("../controllers/goals/index");
 
 router
-  .post('/',passportCheck, createGoal)
+  .post("/", createGoal)
   .get("/", getAllUserGoals)
-  .get("/:id")
-  .patch("/:id")
-  .delete("/:id");
+  .get("/:goalId", getGoalById)
+  .patch("/:goalId", updateGoal)
+  .delete("/:goalId", deleteGoal);
 
 module.exports = router;
