@@ -8,8 +8,8 @@ const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      trim: true
-      // required: true
+      trim: true,
+      required: true
     },
     email: {
       type: String,
@@ -21,8 +21,8 @@ const UserSchema = new mongoose.Schema(
       match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
     age: {
-      type: Number
-      // required: true
+      type: Number,
+      required: true
     },
     password: {
       type: String,
@@ -47,7 +47,13 @@ const UserSchema = new mongoose.Schema(
         ref: "Tasks"
       }
     ],
-    score: {
+    childs: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users"
+      }
+    ],
+    scores: {
       type: Number,
       default: 0
     },
@@ -63,6 +69,22 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+UserSchema.methods.getPublicFields = function() {
+  const returnObject = {
+    email: this.email,
+    name: this.name,
+    age: this.age,
+    scores: this.scores,
+    token: this.token,
+    childs: this.childs,
+    tasks: this.tasks,
+    goals: this.goals,
+    avatar: this.avatar
+  };
+  return returnObject;
+};
+
 // Saves the user's password hashed (plain text password storage is not good)
 UserSchema.pre("save", function(next) {
   const user = this;

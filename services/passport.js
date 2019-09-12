@@ -76,15 +76,19 @@ module.exports = function(passport) {
                 ])
                   .then(result => {
                     console.log("result", result);
+
                     const userData = {
                       userData: {
                         name: result.name,
                         age: result.age,
                         email: result.email,
-                        isChild: result.isChild
+                        isChild: result.isChild,
+                        scores: result.scores,
+                        avatar: result.avatar
                       },
                       goals: result.goals,
                       tasks: result.tasks,
+                      childs: result.childs,
                       token
                     };
 

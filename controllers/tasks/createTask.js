@@ -56,7 +56,7 @@ const createTask = async (req, res) => {
           .save()
           .then(task => {
             if (task) {
-              sendResponse(task);
+              sendResponse(task.getPublicFields());
             }
           })
           .catch(err => {

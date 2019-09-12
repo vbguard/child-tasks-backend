@@ -20,6 +20,7 @@
   "homepage": "https://github.com/vbguard/child-tasks-backend#readme",
   "dependencies": {
     "@hapi/joi": "^15.1.1",
+    "@sendgrid/mail": "^6.4.0",
     "bcrypt": "^3.0.6",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"); // Erase if already required
 
 // Declare the Schema of the Mongo model
-var tasksSchema = new mongoose.Schema(
+var TasksSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -43,5 +43,18 @@ var tasksSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+TasksSchema.methods.getPublicFields = function() {
+  const returnObject = {
+    title: this.title,
+    description: this.description,
+    points: this.points,
+    isDone: this.isDone,
+    createdAt: this.createdAt,
+    deadline: this.deadline,
+    isBlocked: this.isBlocked
+  };
+  return returnObject;
+};
+
 //Export the model
-module.exports = mongoose.model("Tasks", tasksSchema);
+module.exports = mongoose.model("Tasks", TasksSchema);
