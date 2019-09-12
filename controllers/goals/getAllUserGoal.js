@@ -1,11 +1,23 @@
-const Goals = require('../../models/goals.model.js');
+const Goals = require("../../models/goals.model.js");
+const { ValidationError } = require("../../core/error");
 
 const getAllUserGoal = (req, res) => {
-  // const userId = req.user._id;
+  const userId = req.user._id;
 
-  Goals.find().then(goals => {
-    res.json({ goals });
-  }).catch( err => res.status(400).json({ message: err.message }));
+  const sendResponse = goals => {
+    res.json({
+      status: "success",
+      goals
+    });
+  };
+
+  Goals.find({ userId })
+    .then(goals => {
+      sendResponse(goals);
+    })
+    .catch(err => {
+      throw new ValidationError(err.message);
+    });
 };
 
 module.exports = getAllUserGoal;

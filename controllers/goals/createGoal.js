@@ -4,6 +4,8 @@ const Joi = require("joi");
 const { ValidationError } = require("../../core/error");
 
 const createGoal = async (req, res) => {
+  // console.log("createGoal req.user :", req.user);
+
   const schema = Joi.object()
     .keys({
       title: Joi.string()
@@ -25,6 +27,13 @@ const createGoal = async (req, res) => {
     throw new ValidationError(result.error.message);
   }
 
+  const sendResponse = goal => {
+    res.json({
+      status: "success",
+      goal
+    });
+  };
+
   const newGoal = new Goals({
     userId: req.user._id,
     title: req.body.title,
@@ -37,9 +46,10 @@ const createGoal = async (req, res) => {
         newGoal
           .save()
           .then(goal => {
-            if (goal) {
-              res.json(goal);
+            if (!goal) {
+              throw new ValidationError({ message: "no such goal" });
             }
+            sendResponse(goal);
           })
           .catch(err => {
             throw new ValidationError(err.message);

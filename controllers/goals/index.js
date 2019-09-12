@@ -1,5 +1,13 @@
+const createGoal = require("./createGoal");
+const getAllUserGoals = require("./getAllUserGoal");
+const deleteGoal = require("./deleteGoal");
+const updateGoal = require("./updateGoal");
+const getGoalById = require("./getGoalById");
 
-const createGoal = require('./createGoal');
-const getAllUserGoals = require('./getAllUserGoal');
-
-module.exports = { createGoal, getAllUserGoals };
+module.exports = {
+  createGoal,
+  getAllUserGoals,
+  updateGoal,
+  deleteGoal,
+  getGoalById
+};
