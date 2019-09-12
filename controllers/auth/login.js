@@ -48,7 +48,7 @@ const userLogin = (req, res) => {
     },
     (err, user, info) => {
       if (err || !user) {
-        infoMessage = info ? info.message : {massage: "Login failed"},
+        infoMessage = info ? info.message : {message : "Login failed"},
         sendError(infoMessage, user);
         return;
       }
