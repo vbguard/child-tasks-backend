@@ -35,6 +35,13 @@ const createTask = async (req, res) => {
     throw new ValidationError(result.error.message);
   }
 
+  const sendResponse = task => {
+    res.json({
+      status: "success",
+      task
+    });
+  };
+
   const newTask = new Tasks({
     userId: req.user._id,
     title: req.body.title,
@@ -49,7 +56,7 @@ const createTask = async (req, res) => {
           .save()
           .then(task => {
             if (task) {
-              res.json(task);
+              sendResponse(task);
             }
           })
           .catch(err => {
