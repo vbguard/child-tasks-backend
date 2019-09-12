@@ -77,7 +77,7 @@ module.exports = function(passport) {
                   .then(result => {
                     console.log("result", result);
                     const userData = {
-                      user: {
+                      userData: {
                         name: result.name,
                         age: result.age,
                         email: result.email,

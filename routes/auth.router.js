@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const passport = require("passport");
 
-const { login, register, logOut } = require("../controllers/user");
+const { login, register, logOut } = require("../controllers/auth");
 
 const passportCheck = passport.authenticate("jwt", {
   session: false

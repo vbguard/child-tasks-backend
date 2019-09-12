@@ -4,8 +4,6 @@ const { ValidationError } = require("../../core/error");
 
 // Login User and get him Token for access to some route action
 const userLogin = (req, res) => {
-  console.log("userLogin");
-
   const schema = Joi.object()
     .keys({
       email: Joi.string().regex(
@@ -27,19 +25,31 @@ const userLogin = (req, res) => {
     throw new ValidationError(result.error.message);
   }
 
+  const sendResponse = user => {
+    res.json({
+      status: "success",
+      user
+    });
+  };
+
+  const sendError = (error, user) => {
+    const errMessage = error.message || "must handle this error on login";
+    res.status(400).json({
+      status: "error",
+      error: errMessage,
+      user
+    });
+  };
+
   passport.authenticate(
     "local",
     {
       session: false
     },
     (err, user, info) => {
-      console.log("user from login:", user);
-
       if (err || !user) {
-        return res.status(400).json({
-          message: info ? info.message : "Login failed",
-          user: user
-        });
+        sendError(info, user);
+        return;
       }
 
       req.login(
@@ -52,10 +62,7 @@ const userLogin = (req, res) => {
             res.send(err);
           }
 
-          console.log("user2 :", user);
-          return res.json({
-            user
-          });
+          return sendResponse(user);
         }
       );
     }
