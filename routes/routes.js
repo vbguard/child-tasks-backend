@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const router = require("express").Router({ strict: true });
 const passport = require("passport");
 
 const authRouter = require("./auth.router");
