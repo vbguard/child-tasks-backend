@@ -4,8 +4,6 @@ const Joi = require("joi");
 
 const updateGoal = (req, res) => {
   const goalId = req.params.goalId;
-  const newData = req.body;
-  console.log({ newData });
 
   const schema = Joi.object()
     .keys({
@@ -14,7 +12,7 @@ const updateGoal = (req, res) => {
         .max(20),
       points: Joi.number()
         .min(1)
-        .max(20000),
+        .max(10000),
       description: Joi.string()
         .min(1)
         .max(500),
@@ -30,6 +28,8 @@ const updateGoal = (req, res) => {
   if (result.error) {
     throw new ValidationError(result.error.message);
   }
+
+  const validData = result.value;
 
   const sendResponse = goal => {
     res.json({
@@ -47,7 +47,14 @@ const updateGoal = (req, res) => {
     });
   };
 
-  Goals.findByIdAndUpdate(goalId, { $set: newData }, { new: true })
+  const validDataLength = Object.keys(validData).length;
+
+  if (validDataLength === 0) {
+    sendError({ message: "No valid Fields" });
+    return;
+  }
+
+  Goals.findByIdAndUpdate(goalId, { $set: validData }, { new: true })
     .then(goal => {
       if (!goal) {
         sendError({ message: "no such goal" });

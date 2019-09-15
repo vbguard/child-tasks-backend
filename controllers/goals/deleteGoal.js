@@ -28,7 +28,7 @@ const deleteGoal = (req, res) => {
         sendError({ message: "No such goal" });
       }
       User.findByIdAndUpdate(userId, { $pull: { goals: goalId } })
-        .then(() => sendResponse())
+        .then(sendResponse)
         .catch(err => {
           throw new ValidationError(err.message);
         });

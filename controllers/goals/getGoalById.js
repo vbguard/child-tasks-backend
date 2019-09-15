@@ -21,13 +21,13 @@ const getGoalById = (req, res) => {
     });
   };
 
-  Goals.findById({ userId, _id: goalId })
+  Goals.findById({ userId, _id: goalId }, { __v: 0, updatedAt: 0, userId: 0 })
     .then(goal => {
       if (!goal) {
         sendError({ message: "no such goal" });
         return;
       }
-      sendResponse(goal.getPublicFields());
+      sendResponse(goal);
     })
     .catch(err => {
       throw new ValidationError(err.message);

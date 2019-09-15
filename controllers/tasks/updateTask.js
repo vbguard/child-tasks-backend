@@ -4,9 +4,6 @@ const { ValidationError } = require("../../core/error");
 const Joi = require("joi");
 
 const updateTask = (req, res) => {
-  const taskId = req.params.taskId;
-  const newData = req.body;
-
   const schema = Joi.object()
     .keys({
       title: Joi.string()
@@ -14,12 +11,22 @@ const updateTask = (req, res) => {
         .max(20),
       points: Joi.number()
         .min(1)
-        .max(20000),
+        .max(10000),
       description: Joi.string()
         .min(1)
         .max(500),
       isDone: Joi.boolean(),
-      isBlocked: Joi.boolean()
+      isBlocked: Joi.boolean(),
+      deadline: Joi.string().valid([
+        "8.00-10.00",
+        "10.00-12.00",
+        "12.00-14.00",
+        "14.00-16.00",
+        "16.00-18.00",
+        "18.00-20.00",
+        "20.00-22.00",
+        "No time"
+      ])
     })
     .options({
       stripUnknown: true,
@@ -31,6 +38,9 @@ const updateTask = (req, res) => {
   if (result.error) {
     throw new ValidationError(result.error.message);
   }
+
+  const { taskId } = req.params;
+  const validData = result.value;
 
   const sendResponse = task => {
     res.json({
@@ -48,7 +58,14 @@ const updateTask = (req, res) => {
     });
   };
 
-  Tasks.findByIdAndUpdate(taskId, { $set: newData }, { new: true })
+  const validDataLength = Object.keys(validData).length;
+
+  if (validDataLength === 0) {
+    sendError({ message: "No valid Fields" });
+    return;
+  }
+
+  Tasks.findByIdAndUpdate(taskId, { $set: validData }, { new: true })
     .then(task => {
       if (!task) {
         sendError({ message: "no such task" });
