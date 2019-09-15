@@ -51,10 +51,6 @@ const createGoal = async (req, res) => {
         newGoal
           .save()
           .then(goal => {
-            if (!goal) {
-              throw new ValidationError({ message: "no such goal" });
-            }
-
             sendResponse(goal.getPublicFields());
           })
           .catch(err => {

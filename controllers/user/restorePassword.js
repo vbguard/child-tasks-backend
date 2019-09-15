@@ -4,8 +4,6 @@ const Joi = require("joi");
 const { ValidationError } = require("../../core/error");
 
 const restorePassword = async (req, res) => {
-  // REF
-
   const schema = Joi.object()
     .keys({
       email: Joi.string().regex(
@@ -24,15 +22,27 @@ const restorePassword = async (req, res) => {
     throw new ValidationError(result.error.message);
   }
 
-  const { email } = req.body;
-
-  const newPassword = Math.random()
-    .toString(36)
-    .substring(5);
+  const { email } = result.value;
 
   const user = await User.findOne({ email });
 
+  const sendResponse = result => {
+    res.json({ status: "succes", result });
+  };
+
+  const sendError = err => {
+    const errMessage = err.message || "Must handle this error";
+    res.json({
+      status: "error",
+      message: errMessage
+    });
+  };
+
   if (user) {
+    const newPassword = Math.random()
+      .toString(36)
+      .substring(5);
+
     user.password = newPassword;
     user.save();
 
@@ -46,11 +56,11 @@ const restorePassword = async (req, res) => {
       html: `<h2>Ваш новый пароль: ${newPassword}</h2>`
     };
     sgMail.send(msg, (err, result) => {
-      if (err) res.send(err.message);
-      if (result) res.send(result);
+      if (err) sendError(err);
+      if (result) sendResponse(result);
     });
   } else {
-    res.send("error");
+    sendError({ message: "No such user" });
   }
 };
 

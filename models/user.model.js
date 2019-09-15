@@ -72,15 +72,18 @@ const UserSchema = new mongoose.Schema(
 
 UserSchema.methods.getPublicFields = function() {
   const returnObject = {
-    email: this.email,
-    name: this.name,
-    age: this.age,
-    scores: this.scores,
+    userData: {
+      name: this.name,
+      age: this.age,
+      email: this.email,
+      isChild: this.isChild,
+      scores: this.scores,
+      avatar: this.avatar
+    },
     token: this.token,
     childs: this.childs,
     tasks: this.tasks,
-    goals: this.goals,
-    avatar: this.avatar
+    goals: this.goals
   };
   return returnObject;
 };
@@ -88,7 +91,6 @@ UserSchema.methods.getPublicFields = function() {
 // Saves the user's password hashed (plain text password storage is not good)
 UserSchema.pre("save", function(next) {
   const user = this;
-
   if (this.isModified("password") || this.isNew) {
     bcrypt.genSalt(10, function(err, salt) {
       if (err) {
@@ -107,6 +109,23 @@ UserSchema.pre("save", function(next) {
   }
 });
 
+UserSchema.pre("findOneAndUpdate", function(next) {
+  const update = this.getUpdate();
+  // Если обновляем пароль
+  // привет callback hell
+  if (update["$set"] && update["$set"].password) {
+    bcrypt
+      .hash(update["$set"].password, 10)
+      .then(hashedPassword => {
+        update["$set"].password = hashedPassword;
+        next();
+      })
+      .catch(err => next(err));
+  } else {
+    next();
+  }
+});
+
 // Create method to compare password input to password saved in database
 UserSchema.methods.comparePassword = function(pw, cb) {
   bcrypt.compare(pw, this.password, function(err, isMatch) {
@@ -122,9 +141,7 @@ UserSchema.methods.generateHash = function(password) {
 };
 
 UserSchema.methods.validatePassword = function(password) {
-  console.log("validate :", password);
   const compare = bcrypt.compareSync(password, this.password);
-  console.log("compare :", compare);
   return compare;
 };
 
