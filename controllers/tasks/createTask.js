@@ -8,23 +8,29 @@ const createTask = async (req, res) => {
     .keys({
       title: Joi.string()
         .min(3)
-        .max(20),
+        .max(20)
+        .required(),
       points: Joi.number()
         .min(1)
-        .max(500),
-      deadline: Joi.string().valid([
-        "8.00-10.00",
-        "10.00-12.00",
-        "12.00-14.00",
-        "14.00-16.00",
-        "16.00-18.00",
-        "18.00-20.00",
-        "20.00-22.00",
-        "No time"
-      ])
+        .max(500)
+        .required(),
+      deadline: Joi.string()
+        .valid([
+          "8.00-10.00",
+          "10.00-12.00",
+          "12.00-14.00",
+          "14.00-16.00",
+          "16.00-18.00",
+          "18.00-20.00",
+          "20.00-22.00",
+          "No time"
+        ])
+        .required(),
+      description: Joi.string()
+        .min(3)
+        .max(500)
     })
     .options({
-      presence: "required",
       stripUnknown: true,
       abortEarly: false
     });
@@ -36,6 +42,7 @@ const createTask = async (req, res) => {
   }
 
   const { _id } = req.user;
+  const validData = result.value;
 
   const sendResponse = task => {
     res.json({
@@ -54,9 +61,7 @@ const createTask = async (req, res) => {
 
   const newTask = new Tasks({
     userId: req.user._id,
-    title: req.body.title,
-    points: req.body.points,
-    deadline: req.body.deadline
+    ...validData
   });
 
   User.findByIdAndUpdate(_id, { $push: { tasks: newTask._id } })
@@ -69,9 +74,7 @@ const createTask = async (req, res) => {
       newTask
         .save()
         .then(task => {
-          if (task) {
-            sendResponse(task.getPublicFields());
-          }
+          sendResponse(task.getPublicFields());
         })
         .catch(err => {
           throw new ValidationError(err.message);

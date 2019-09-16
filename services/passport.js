@@ -77,21 +77,21 @@ module.exports = function(passport) {
                   }
                 ])
                   .then(result => {
-                    const userData = {
-                      userData: {
-                        name: result.name,
-                        age: result.age,
-                        email: result.email,
-                        isChild: result.isChild,
-                        scores: result.scores,
-                        avatar: result.avatar
-                      },
-                      goals: result.goals,
-                      tasks: result.tasks,
-                      childs: result.childs,
-                      token
-                    };
-
+                    // const userData = {
+                    //   userData: {
+                    //     name: result.name,
+                    //     age: result.age,
+                    //     email: result.email,
+                    //     isChild: result.isChild,
+                    //     scores: result.scores,
+                    //     avatar: result.avatar
+                    //   },
+                    //   goals: result.goals,
+                    //   tasks: result.tasks,
+                    //   childs: result.childs,
+                    //   token
+                    // };
+                    const userData = result.getPublicFields();
                     return cb(null, userData, {
                       message: "Logged In Successfully"
                     });

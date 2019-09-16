@@ -4,7 +4,7 @@ const { ValidationError } = require("../../core/error");
 
 const getTaskById = (req, res) => {
   const userId = req.user._id;
-  const taskId = req.params.taskId;
+  const { taskId } = req.params;
 
   const sendResponse = task => {
     res.json({
@@ -22,13 +22,13 @@ const getTaskById = (req, res) => {
     });
   };
 
-  Tasks.findById({ userId, _id: taskId })
+  Tasks.findById({ userId, _id: taskId }, { __v: 0, updatedAt: 0, userId: 0 })
     .then(task => {
       if (!task) {
         sendError({ message: "no such task" });
         return;
       }
-      sendResponse(task.getPublicFields());
+      sendResponse(task);
     })
     .catch(err => {
       throw new ValidationError(err.message);

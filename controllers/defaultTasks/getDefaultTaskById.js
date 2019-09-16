@@ -3,7 +3,7 @@ const DefaultTasks = require("../../models/defaultTasks.model");
 const { ValidationError } = require("../../core/error");
 
 const getDefaultTaskById = (req, res) => {
-  const taskId = req.params.taskId;
+  const { taskId } = req.params;
 
   const sendResponse = task => {
     res.json({

@@ -7,18 +7,29 @@ const createDefaultTasks = (req, res) => {
     .keys({
       title: Joi.string()
         .min(3)
-        .max(20),
-      description: Joi.string()
-        .min(3)
-        .max(500),
+        .max(20)
+        .required(),
       points: Joi.number()
         .min(1)
-        .max(20000)
-
-      // deadline
+        .max(500)
+        .required(),
+      deadline: Joi.string()
+        .valid([
+          "8.00-10.00",
+          "10.00-12.00",
+          "12.00-14.00",
+          "14.00-16.00",
+          "16.00-18.00",
+          "18.00-20.00",
+          "20.00-22.00",
+          "No time"
+        ])
+        .required(),
+      description: Joi.string()
+        .min(3)
+        .max(500)
     })
     .options({
-      presence: "required",
       stripUnknown: true,
       abortEarly: false
     });
@@ -28,7 +39,7 @@ const createDefaultTasks = (req, res) => {
   if (result.error) {
     throw new ValidationError(result.error.message);
   }
-  const { title, description, points } = req.body;
+  const validData = result.value;
 
   const sendResponse = task => {
     res.json({
@@ -47,9 +58,7 @@ const createDefaultTasks = (req, res) => {
   };
 
   const newTask = new DefaultTasks({
-    title,
-    description,
-    points
+    ...validData
   });
 
   newTask

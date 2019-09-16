@@ -10,13 +10,17 @@ const createGoal = async (req, res) => {
     .keys({
       title: Joi.string()
         .min(3)
-        .max(20),
+        .max(20)
+        .required(),
       points: Joi.number()
         .min(1)
-        .max(20000)
+        .max(10000)
+        .required(),
+      description: Joi.string()
+        .min(3)
+        .max(500)
     })
     .options({
-      presence: "required",
       stripUnknown: true,
       abortEarly: false
     });
@@ -34,10 +38,11 @@ const createGoal = async (req, res) => {
     });
   };
 
+  const validData = result.value;
+
   const newGoal = new Goals({
     userId: req.user._id,
-    title: req.body.title,
-    points: req.body.points
+    ...validData
   });
 
   User.findByIdAndUpdate(req.user._id, { $push: { goals: newGoal._id } })
@@ -46,10 +51,6 @@ const createGoal = async (req, res) => {
         newGoal
           .save()
           .then(goal => {
-            if (!goal) {
-              throw new ValidationError({ message: "no such goal" });
-            }
-
             sendResponse(goal.getPublicFields());
           })
           .catch(err => {

@@ -12,9 +12,7 @@ const getAllUserGoal = (req, res) => {
   };
 
   Goals.find({ userId }, { __v: 0, updatedAt: 0, userId: 0 })
-    .then(goals => {
-      sendResponse(goals);
-    })
+    .then(sendResponse)
     .catch(err => {
       throw new ValidationError(err.message);
     });

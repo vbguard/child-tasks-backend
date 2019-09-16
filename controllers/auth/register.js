@@ -9,21 +9,27 @@ const userSignup = (req, res) => {
 
   const schema = Joi.object()
     .keys({
-      email: Joi.string().regex(
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-      ),
+      email: Joi.string()
+        .regex(
+          /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+        )
+        .required(),
       password: Joi.string()
         .min(6)
-        .max(16),
+        .max(16)
+        .required(),
       name: Joi.string()
         .min(3)
-        .max(16),
+        .max(16)
+        .required(),
       age: Joi.number()
         .min(3)
         .max(99)
+        .required(),
+      avatar: Joi.string(),
+      isChild: Joi.boolean()
     })
     .options({
-      presence: "required",
       stripUnknown: true,
       abortEarly: false
     });
