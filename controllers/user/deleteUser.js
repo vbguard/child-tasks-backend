@@ -21,17 +21,18 @@ const deleteUser = (req, res) => {
     });
   };
 
-  User.findById(userId)
-    .lean()
+  User.findByIdAndDelete(userId)
     .then(async () => {
-      const removed = {};
-      const removedGoals = await Goals.remove({ userId });
-      removed.goals = removedGoals.deletedCount;
-      const removedTasks = await Tasks.remove({ userId });
-      removed.tasks = removedTasks.deletedCount;
-      const removedUser = await User.findByIdAndDelete(userId);
-      removed.user = removedUser && true;
-      sendResponse(removed);
+      const removed = { user: true };
+      try {
+        const removedGoals = await Goals.remove({ userId });
+        removed.goals = removedGoals.deletedCount;
+        const removedTasks = await Tasks.remove({ userId });
+        removed.tasks = removedTasks.deletedCount;
+        sendResponse(removed);
+      } catch (err) {
+        sendError(err);
+      }
     })
     .catch(sendError);
 };
