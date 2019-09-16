@@ -2,18 +2,13 @@ require("dotenv").config();
 require("./core/express-promise");
 const express = require("express");
 const app = express();
-const config = require("../config/config");
+const config = require("./config/config");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
 const path = require("path");
-
-// NEXT
-const next = require("next");
-const dev = process.env.NODE_DEV !== "production"; //true false
-const nextApp = next({ dev });
-// const handle = nextApp.getRequestHandler(); //part of next config
+const sassMiddleware = require("node-sass-middleware");
 
 const { ValidationError } = require("./core/error");
 
@@ -41,11 +36,9 @@ mongoose
 if (mode) {
   app.use(logger("dev"));
 }
-// nextApp
-//   .prepare()
-//   .then(() => {
-app
 
+app
+  .disable("x-powered-by")
   .use(express.json({ limit: "2mb" }))
   .use(express.urlencoded({ extended: false, limit: "2mb" }))
   .use(
@@ -57,13 +50,26 @@ app
     })
   )
 
+  .set("views", __dirname + "/views")
+  .set("view engine", "jsx")
+  .engine("jsx", require("express-react-views").createEngine());
+app
+  .use(
+    sassMiddleware({
+      src: path.join(__dirname, "public"),
+      dest: path.join(__dirname, "public"),
+      indentedSyntax: true, // true = .sass and false = .scss
+      sourceMap: true
+    })
+  )
+
   .use(passport.initialize())
   .use(passport.session());
 require("./services/passport")(passport);
 
 app
+  .use(express.static(path.join(__dirname, "public")))
   .use("/api", router)
-  .use("/_next", express.static(path.join(__dirname, "../.next")))
   .get("*", ssrRoutes)
   // .use("*", notFound)
   // add error handlers
@@ -81,5 +87,3 @@ app
   .listen(PORT, () => {
     console.log(`Server start on http://localhost:${PORT}`);
   });
-// })
-// .catch(error => console.error(error));

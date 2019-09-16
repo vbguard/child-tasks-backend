@@ -2,7 +2,7 @@ const mongoose = require("mongoose"); // Erase if already required
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const config = require("../../config/config");
+const config = require("../config/config");
 // Declare the Schema of the Mongo model
 const UserSchema = new mongoose.Schema(
   {
