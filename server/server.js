@@ -12,12 +12,6 @@ const path = require("path");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./services/swagger.json");
 
-// NEXT
-const next = require("next");
-const dev = process.env.NODE_DEV !== "production"; //true false
-const nextApp = next({ dev });
-// const handle = nextApp.getRequestHandler(); //part of next config
-
 const { ValidationError } = require("./core/error");
 
 // middleware
