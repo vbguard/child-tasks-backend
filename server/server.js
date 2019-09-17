@@ -9,6 +9,9 @@ const passport = require("passport");
 const session = require("express-session");
 const path = require("path");
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./services/swagger.json");
+
 // NEXT
 const next = require("next");
 const dev = process.env.NODE_DEV !== "production"; //true false
@@ -63,6 +66,11 @@ require("./services/passport")(passport);
 
 app
   .use("/api", router)
+  .use(
+    "/doc",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument, { customeSiteTitle: "Task Manager" })
+  )
   .use("/_next", express.static(path.join(__dirname, "../.next")))
   .get("*", ssrRoutes)
   // .use("*", notFound)
@@ -75,8 +83,8 @@ app
     next(err);
   })
 
-  // .use(validationErrorHandler)
-  // .use(errorHandler)
+  .use(validationErrorHandler)
+  .use(errorHandler)
 
   .listen(PORT, () => {
     console.log(`Server start on http://localhost:${PORT}`);

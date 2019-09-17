@@ -40,7 +40,8 @@
     "passport-local": "^1.0.0",
     "path-match": "^1.2.4",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "swagger-ui-express": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^6.3.0",
