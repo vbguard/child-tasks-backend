@@ -2,6 +2,7 @@ const Goals = require("../../models/goals.model.js");
 const User = require("../../models/user.model");
 const Joi = require("joi");
 const { ValidationError } = require("../../core/error");
+const sendError = require("../../helpers/sendError");
 
 const createGoal = async (req, res) => {
   // console.log("createGoal req.user :", req.user);
@@ -54,12 +55,12 @@ const createGoal = async (req, res) => {
             sendResponse(goal.getPublicFields());
           })
           .catch(err => {
-            throw new ValidationError(err.message);
+            sendError(res, err);
           });
       }
     })
     .catch(err => {
-      throw new ValidationError(err.message);
+      sendError(res, err);
     });
 };
 

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import styles from './Restore.module.css'
+const React = require('react')
+const {useState} = React;
+const Html = require('../Html/Html')
 
-const index = () => {
+const Restore = ()=> {
   const [password, setPassword] = useState("");
   const [passwordRepeated, setPasswordRepeated] = useState("");
-
 
   const onSubmit = e => {
     e.preventDefault();
@@ -28,21 +28,24 @@ const index = () => {
   };
 
   return (
-    <div className={styles.formWrapper}>
-      <form action="" className={styles.form} onSubmit={onSubmit}>
-        <label htmlFor="password" className={styles.formComponent}>
+    <Html title="Admin tools">
+    <div className="formWrapper">
+      <form action="" className="form" onSubmit={onSubmit}>
+        <label htmlFor="password" className="formComponent">
           New password
           <input type="password" id="password" onChange={onInput} />
         </label>
-        <label htmlFor="password_repeated" className={styles.formComponent}>
+        <label htmlFor="password_repeated" className="formComponent">
           Repeat password
           <input type="password" id="password_repeated" onChange={onInput} />
         </label>
-        <button type="submit" className={styles.formComponent}>Ok</button >
+        <button type="submit" className="formComponent">Ok</button >
       </form>
     </div>
-
-  );
+    </Html>
+)
 };
 
-export default index;
+module.exports = Restore;
+
+

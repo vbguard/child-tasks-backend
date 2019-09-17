@@ -1,5 +1,15 @@
-import React from 'react';
-import { render } from 'react-dom';
-import App from './App';
+const React = require('react');
 
-render(<App />, document.getElementById('root'));
+class HelloMessage extends React.Component {
+  render() {
+    return (
+      <>
+        <div>Hello {this.props.name}</div>
+        <h1>It is a Test component server side rendering</h1>
+        <h2>made with ❤️ ReactJS</h2>
+      </>
+    );
+  }
+}
+
+module.exports = HelloMessage;

@@ -8,21 +8,23 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
 const path = require("path");
+const chalk = require("chalk");
 const sassMiddleware = require("node-sass-middleware");
 // const path = require("path");
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./services/swagger.json");
 
+// core
 const { ValidationError } = require("./core/error");
+const onError = require("./core/onError");
 
 // middleware
-const validationErrorHandler = require("./middleware/validation-error-handler");
-const errorHandler = require("./middleware/error-handler");
-const notFound = require("./middleware/not-found");
+// const validationErrorHandler = require("./middleware/validation-error-handler");
+// const errorHandler = require("./middleware/error-handler");
 
 const router = require("./routes/routes.js");
-// const ssrRoutes = require("./routes/ssrRoutes.js");
+const ssrRoutes = require("./routes/ssrRoutes.js");
 
 const PORT = config.PORT;
 
@@ -34,7 +36,7 @@ mongoose
     useFindAndModify: false,
     useCreateIndex: true
   })
-  .then(() => console.log("DB Connected..."))
+  .then(() => console.error(chalk.yellow(`DB Connected...`)))
   .catch(err => console.log(err));
 
 if (mode) {
@@ -54,10 +56,10 @@ app
     })
   )
 
+  // ssr
   .set("views", __dirname + "/views")
   .set("view engine", "jsx")
-  .engine("jsx", require("express-react-views").createEngine());
-app
+  .engine("jsx", require("express-react-views").createEngine())
   .use(
     sassMiddleware({
       src: path.join(__dirname, "public"),
@@ -72,16 +74,14 @@ app
 require("./services/passport")(passport);
 
 app
-  .use(".public", express.static(path.join(__dirname, "public")))
+  .use("/public", express.static(path.join(__dirname, "public")))
   .use("/api", router)
   .use(
     "/doc",
     swaggerUi.serve,
     swaggerUi.setup(swaggerDocument, { customeSiteTitle: "Task Manager" })
   )
-  // .use("/_next", express.static(path.join(__dirname, "../.next")))
-  .get("*", ssrRoutes)
-  // .use("*", notFound)
+  .use("/", ssrRoutes)
   // add error handlers
 
   .use((err, req, res, next) => {
@@ -91,9 +91,12 @@ app
     next(err);
   })
 
-  .use(validationErrorHandler)
-  .use(errorHandler)
+  // .use(validationErrorHandler)
+  // .use(errorHandler)
 
   .listen(PORT, () => {
-    console.log(`Server start on http://localhost:${PORT}`);
-  });
+    console.error(
+      `Server start on ${chalk.yellow(`http://localhost:${PORT}`)}`
+    );
+  })
+  .on("error", onError);
