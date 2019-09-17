@@ -1,11 +1,11 @@
 import React from "react";
 
-import User from "../../components/User";
+// import User from "../../components/User";
 
-const authIndexPage = (props) => (
+const authIndexPage = props => (
   <div>
     <h1>The Auth Index Page - {props.appName}</h1>
-    <User name="Max" age={28} />
+    {/* <User name="Max" age={28} /> */}
   </div>
 );
 

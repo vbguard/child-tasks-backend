@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "webpack",
-    "ssr": "next"
+    "build": "next build",
+    "ssr": "next",
+    "ssrTest": "NODE_ENV=production && node server.js"
   },
   "repository": {
     "type": "git",
