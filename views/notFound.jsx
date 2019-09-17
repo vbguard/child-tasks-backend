@@ -1,6 +1,6 @@
-import React from 'react'
-import { render } from 'react-dom';
-import styled from 'styled-components';
+const React = require('react')
+const { render } = require('react-dom')
+const styled = require('styled-components')
 
 const AppContainer = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ const NotFound = () => {
       </div>
       <div className='c'>
         <div className='_404'>404</div>
-        {/* <hr> */}
+        <hr />
         <div className='_1'>THE PAGE</div>
         <div className='_2'>WAS NOT FOUND</div>
         <a className='btn' href='#'>BACK TO MARS</a>
