@@ -48,7 +48,8 @@
     "path-match": "^1.2.4",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "styled-components": "^4.3.2"
+    "styled-components": "^4.3.2",
+    "swagger-ui-express": "^4.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
