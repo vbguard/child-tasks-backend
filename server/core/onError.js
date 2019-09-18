@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const config = require("../config/config");
+const config = require("../../config/config");
 const PORT = config.PORT;
 
 const onError = (err, req, res, next) => {
