@@ -7,6 +7,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
+const cors = require("cors");
 // const path = require("path");
 
 const swaggerUi = require("swagger-ui-express");
@@ -42,7 +43,6 @@ if (mode) {
 //   .prepare()
 //   .then(() => {
 app
-
   .use(express.json({ limit: "2mb" }))
   .use(express.urlencoded({ extended: false, limit: "2mb" }))
   .use(
@@ -53,7 +53,7 @@ app
       cookie: { maxAge: 60000 }
     })
   )
-
+  .use(cors("*"))
   .use(passport.initialize())
   .use(passport.session());
 require("./services/passport")(passport);
