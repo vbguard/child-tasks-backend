@@ -16,6 +16,9 @@ router
   .use("/goals", passportCheck, goalsRouter)
   .use("/tasks", passportCheck, tasksRouter)
   .use("/user", userRouter)
-  .use("/defaultTasks", defaultTasksRouter);
+  .use("/defaultTasks", defaultTasksRouter)
+  .all("*", (req, res) => {
+    res.json({ status: "error", message: "No such route" });
+  });
 
 module.exports = router;
