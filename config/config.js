@@ -1,6 +1,7 @@
 const mode = process.env.NODE_ENV === "production";
 
 module.exports = {
+  mongoURL: process.env.MONGO_DB_URL,
   PORT: process.env.PORT || 5002,
   SERVER_URL_LOCAL: `http://localhost:${this.PORT}`,
   SERVER_URL_PROD: "",
