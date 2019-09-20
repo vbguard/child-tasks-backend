@@ -17,6 +17,18 @@ var TasksSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    isBlocked: {
+      type: Boolean,
+      default: false
+    },
+    isComplete: {
+      type: Boolean,
+      default: false
+    },
+    inActive: {
+      type: Boolean,
+      default: true
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users"
@@ -35,23 +47,29 @@ var TasksSchema = new mongoose.Schema(
       ],
       required: true
     },
-    isBlocked: {
-      type: Boolean,
-      default: false
+    dateMoveToDone: {
+      type: Date
     }
   },
   { timestamps: true }
 );
 
+TasksSchema.pre('findOneAndUpdate', function() {
+  const doc = this;
+  console.log(doc.inActive)
+})
+
 TasksSchema.methods.getPublicFields = function() {
   const returnObject = {
     title: this.title,
-    description: this.description,
     points: this.points,
     isDone: this.isDone,
+    dateMoveToDone: this.dateMoveToDone,
+    isComplete: this.isComplete,
+    inActive: this.inActive,
     createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
     deadline: this.deadline,
-    isBlocked: this.isBlocked,
     _id: this.id
   };
   return returnObject;

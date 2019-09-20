@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon index.js",
+    "dev": "npm run build && nodemon index.js",
     "build": "next build"
   },
   "repository": {
@@ -40,6 +40,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.13",
     "next": "^9.0.5",
+    "node-cron": "^2.0.3",
     "node-sass-middleware": "^0.11.0",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
