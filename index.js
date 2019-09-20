@@ -1,9 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const config = require("./config/config");
-const path = require("path");
+// const path = require("path");
 const next = require("next");
 const chalk = require("chalk");
+
+require('./server/lib/cron');
 
 const createServer = require("./server/server");
 const connectToDB = require("./config/mongodb");

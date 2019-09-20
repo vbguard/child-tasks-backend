@@ -16,7 +16,8 @@ const updateTask = (req, res) => {
         .min(1)
         .max(500),
       isDone: Joi.boolean(),
-      isBlocked: Joi.boolean(),
+      inActive: Joi.boolean(),
+      isComplete: Joi.boolean(),
       deadline: Joi.string().valid([
         "8.00-10.00",
         "10.00-12.00",
@@ -65,7 +66,7 @@ const updateTask = (req, res) => {
     return;
   }
 
-  Tasks.findByIdAndUpdate(taskId, { $set: validData }, { new: true })
+  Tasks.findOneAndUpdate({_id: taskId }, { $set: validData }, { new: true })
     .then(task => {
       if (!task) {
         sendError({ message: "no such task" });
