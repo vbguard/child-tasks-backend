@@ -1,5 +1,5 @@
 apps:
-  - script: ./server/server.js
+  - script: index.js
     name: 'goToGoal'
     instances: 2
     exec_mode: cluster
