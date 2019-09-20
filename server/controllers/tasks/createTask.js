@@ -12,7 +12,7 @@ const createTask = async (req, res) => {
         .required(),
       points: Joi.number()
         .min(1)
-        .max(500)
+        .max(9999)
         .required(),
       deadline: Joi.string()
         .valid([
