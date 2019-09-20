@@ -12,8 +12,10 @@ globals:
   SharedArrayBuffer: readonly
 parserOptions:
   ecmaVersion: 2018
-  sourceType: "module"
+  # sourceType: "module"
   ecmaFeatures:
     jsx: true
-rules: {}
+rules: {
+  
+}
 parser: babel-eslint

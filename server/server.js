@@ -8,6 +8,9 @@ const path = require("path");
 const chalk = require("chalk");
 
 // doc
+const cors = require("cors");
+// const path = require("path");
+
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./services/swagger.json");
 
@@ -16,10 +19,12 @@ const { ValidationError } = require("./core/error");
 const onError = require("./core/onError");
 
 // middleware
-// const validationErrorHandler = require("./middleware/validation-error-handler");
-// const errorHandler = require("./middleware/error-handler");
+const validationErrorHandler = require("./middleware/validation-error-handler");
+const errorHandler = require("./middleware/error-handler");
+const notFound = require("./middleware/not-found");
 
 const router = require("./routes/routes.js");
+// const ssrRoutes = require("./routes/ssrRoutes.js");
 
 const isdev = process.env.NODE_ENV !== "production";
 
@@ -52,7 +57,7 @@ const createServer = (app, PORT) => {
         cookie: { maxAge: 60000 }
       })
     )
-
+    .use(cors("*"))
     .use(passport.initialize())
     .use(passport.session());
   require("./services/passport")(passport);
