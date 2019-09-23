@@ -70,6 +70,7 @@ TasksSchema.methods.getPublicFields = function() {
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     deadline: this.deadline,
+    isBlocked: this.isBlocked,
     _id: this.id
   };
   return returnObject;
