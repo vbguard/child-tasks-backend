@@ -4,7 +4,8 @@ const passport = require("passport");
 const {
   restorePassword,
   updateUser,
-  deleteUser
+  deleteUser,
+  getUser
 } = require("../controllers/user");
 
 const passportCheck = passport.authenticate("jwt", {
@@ -13,7 +14,7 @@ const passportCheck = passport.authenticate("jwt", {
 
 router
   .post("/:id")
-  .get("/:id")
+  .get("/", passportCheck, getUser)
   .delete("/", passportCheck, deleteUser)
   .put("/", passportCheck, updateUser)
   .post("/restore", restorePassword);
