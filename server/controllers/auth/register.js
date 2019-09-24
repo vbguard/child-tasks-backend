@@ -5,8 +5,6 @@ const { ValidationError } = require("../../core/error");
 
 // Register New User and Check this email have in DB
 const userSignup = (req, res) => {
-  const { email, password, name, age } = req.body;
-
   const schema = Joi.object()
     .keys({
       email: Joi.string()
@@ -48,7 +46,7 @@ const userSignup = (req, res) => {
       error: errMessage
     });
   };
-  
+
   const newUser = new User(result.value);
 
   newUser

@@ -19,9 +19,9 @@ const { ValidationError } = require("./core/error");
 const onError = require("./core/onError");
 
 // middleware
-const validationErrorHandler = require("./middleware/validation-error-handler");
-const errorHandler = require("./middleware/error-handler");
-const notFound = require("./middleware/not-found");
+// const validationErrorHandler = require("./middleware/validation-error-handler");
+// const errorHandler = require("./middleware/error-handler");
+// const notFound = require("./middleware/not-found");
 
 const router = require("./routes/routes.js");
 // const ssrRoutes = require("./routes/ssrRoutes.js");
@@ -63,6 +63,7 @@ const createServer = (app, PORT) => {
   require("./services/passport")(passport);
 
   app
+    .use(express.static(path.join(__dirname, "../static")))
     .use("/_next", express.static(path.resolve(__dirname, "../.next")))
     .use("/public", express.static(path.join(__dirname, "../public")))
     .use("/api", router)
@@ -80,6 +81,9 @@ const createServer = (app, PORT) => {
       next(err);
     })
 
+    .use((err, req, res) => {
+      res.status(500).json({ error: err, message: err.message });
+    })
     // .use(validationErrorHandler)
     // .use(errorHandler)
 
