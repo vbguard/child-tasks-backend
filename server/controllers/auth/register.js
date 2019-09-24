@@ -48,8 +48,8 @@ const userSignup = (req, res) => {
       error: errMessage
     });
   };
-
-  const newUser = new User(result.valid);
+  
+  const newUser = new User(result.value);
 
   newUser
     .save()
