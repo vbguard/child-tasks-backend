@@ -49,12 +49,7 @@ const userSignup = (req, res) => {
     });
   };
 
-  const newUser = new User({
-    email,
-    password,
-    name,
-    age
-  });
+  const newUser = new User(result.valid);
 
   newUser
     .save()
