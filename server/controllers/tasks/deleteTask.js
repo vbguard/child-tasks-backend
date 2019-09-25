@@ -28,11 +28,24 @@ const deleteTask = (req, res) => {
         sendError({ message: "no such task" });
         return;
       }
-      User.findByIdAndUpdate(userId, { $pull: { tasks: taskId } })
-        .then(sendResponse)
-        .catch(err => {
-          throw new ValidationError(err.message);
-        });
+      if (task.isComplete) {
+        User.findByIdAndUpdate(userId, {
+          $pull: { tasks: taskId },
+          $inc: { scores: -task.points }
+        })
+          .then(() => {
+            return sendResponse;
+          })
+          .catch(err => {
+            throw new ValidationError(err.message);
+          });
+      } else {
+        User.findByIdAndUpdate(userId, { $pull: { tasks: taskId } })
+          .then(sendResponse)
+          .catch(err => {
+            throw new ValidationError(err.message);
+          });
+      }
     })
     .catch(err => {
       throw new ValidationError(err.message);

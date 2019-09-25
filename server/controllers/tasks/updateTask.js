@@ -1,9 +1,12 @@
 const Tasks = require("../../models/tasks.model.js");
+const User = require("../../models/user.model.js");
 
 const { ValidationError } = require("../../core/error");
 const Joi = require("joi");
 
 const updateTask = (req, res) => {
+  const userId = req.user.id;
+
   const schema = Joi.object()
     .keys({
       title: Joi.string()
@@ -46,7 +49,7 @@ const updateTask = (req, res) => {
   const sendResponse = task => {
     res.json({
       status: "success",
-      task
+      ...task
     });
   };
 
@@ -66,13 +69,46 @@ const updateTask = (req, res) => {
     return;
   }
 
-  Tasks.findOneAndUpdate({_id: taskId }, { $set: validData }, { new: true })
+  Tasks.findOneAndUpdate({ _id: taskId }, { $set: validData }, { new: true })
     .then(task => {
       if (!task) {
         sendError({ message: "no such task" });
         return;
       }
-      sendResponse(task.getPublicFields());
+      
+      if (req.body.isComplete) {
+        User.findOneAndUpdate(
+          { _id: userId },
+          { $inc: { scores: task.points } },
+          { new: true }
+        )
+          .then(updatedUser => {
+            return sendResponse({
+              task: task.getPublicFields(),
+              user: { scores: updatedUser.scores }
+            });
+          })
+          .catch(err => {
+            throw new Error(err);
+          });
+      } else {
+        User.findOneAndUpdate(
+          { _id: userId },
+          { $inc: { scores: -task.points } },
+          { new: true }
+        )
+          .then(updatedUser => {
+            return sendResponse({
+              task: task.getPublicFields(),
+              user: { scores: updatedUser.scores }
+            });
+          })
+          .catch(err => {
+            throw new Error(err);
+          });
+      }
+
+      return sendResponse(task.getPublicFields());
     })
     .catch(err => {
       throw new ValidationError(err.message);
