@@ -30,10 +30,14 @@ const deleteTask = (req, res) => {
         return;
       }
       if (task.isComplete) {
-        User.findByIdAndUpdate(userId, {
-          $pull: { tasks: taskId },
-          $inc: { scores: -task.points }
-        })
+        return User.findByIdAndUpdate(
+          userId,
+          {
+            $pull: { tasks: taskId },
+            $inc: { scores: -task.points }
+          },
+          { new: true }
+        )
           .then(updatedUser => {
             return sendResponse({ user: { scores: updatedUser.scores } });
           })
@@ -41,7 +45,7 @@ const deleteTask = (req, res) => {
             throw new ValidationError(err.message);
           });
       } else {
-        User.findByIdAndUpdate(userId, { $pull: { tasks: taskId } })
+        return User.findByIdAndUpdate(userId, { $pull: { tasks: taskId } }, { new: true})
           .then(sendResponse)
           .catch(err => {
             throw new ValidationError(err.message);
