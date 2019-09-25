@@ -1,9 +1,11 @@
 const Goals = require("../../models/goals.model.js");
+const User = require("../../models/user.model.js");
 const { ValidationError } = require("../../core/error");
 const Joi = require("joi");
 
 const updateGoal = (req, res) => {
   const goalId = req.params.goalId;
+  const userId = req.user.id;
 
   const schema = Joi.object()
     .keys({
@@ -34,7 +36,7 @@ const updateGoal = (req, res) => {
   const sendResponse = goal => {
     res.json({
       status: "success",
-      goal
+      ...goal
     });
   };
 
@@ -57,10 +59,27 @@ const updateGoal = (req, res) => {
   Goals.findByIdAndUpdate(goalId, { $set: validData }, { new: true })
     .then(goal => {
       if (!goal) {
-        sendError({ message: "no such goal" });
-        return;
+        return sendError({ message: "no such goal" });
       }
-      sendResponse(goal.getPublicFields());
+
+      if (req.body.isDone) {
+        return User.findByIdAndUpdate(
+          userId,
+          { $inc: { scores: -goal.points } },
+          { new: true }
+        )
+          .then(updatedUser => {
+            sendError({
+              user: { scores: updatedUser.scores },
+              message: "Goal completed!!!"
+            });
+          })
+          .catch(err => {
+            throw new Error(err);
+          });
+      }
+      
+      return sendResponse(goal.getPublicFields());
     })
     .catch(err => {
       throw new ValidationError(err.message);
