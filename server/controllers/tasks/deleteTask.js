@@ -10,7 +10,7 @@ const deleteTask = (req, res) => {
   const sendResponse = user => {
     res.json({
       status: "success",
-      user
+      ...user
     });
   };
 
@@ -39,13 +39,17 @@ const deleteTask = (req, res) => {
           { new: true }
         )
           .then(updatedUser => {
-            return sendResponse({ user: { scores: updatedUser.scores } });
+            return sendResponse({ message: "Task successful deleted!", user: { scores: updatedUser.scores } });
           })
           .catch(err => {
             throw new ValidationError(err.message);
           });
       } else {
-        return User.findByIdAndUpdate(userId, { $pull: { tasks: taskId } }, { new: true})
+        return User.findByIdAndUpdate(
+          userId,
+          { $pull: { tasks: taskId } },
+          { new: true }
+        )
           .then(sendResponse)
           .catch(err => {
             throw new ValidationError(err.message);
