@@ -39,7 +39,10 @@ const deleteTask = (req, res) => {
           { new: true }
         )
           .then(updatedUser => {
-            return sendResponse({ message: "Task successful deleted!", user: { scores: updatedUser.scores } });
+            return sendResponse({
+              message: "Task successful deleted!",
+              user: { scores: updatedUser.scores }
+            });
           })
           .catch(err => {
             throw new ValidationError(err.message);

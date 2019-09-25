@@ -63,7 +63,7 @@ const createServer = (app, PORT) => {
   require("./services/passport")(passport);
 
   app
-    .use(express.static(path.join(__dirname, "../static")))
+    .use("/image", express.static(path.join(__dirname, "../static")))
     .get("/", express.static(path.join(__dirname, "../client")))
     .get("/dashboard", express.static(path.join(__dirname, "../client")))
     .get("/contacts", express.static(path.join(__dirname, "../client")))
@@ -73,7 +73,7 @@ const createServer = (app, PORT) => {
     .use(
       "/doc",
       swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument, { customeSiteTitle: "Task Manager" })
+      swaggerUi.setup(swaggerDocument, { customSiteTitle: "GoToGoal" })
     )
 
     // add error handlers
@@ -98,6 +98,6 @@ const createServer = (app, PORT) => {
       }
     })
     .on("error", onError);
-  };
+};
 
 module.exports = createServer;
