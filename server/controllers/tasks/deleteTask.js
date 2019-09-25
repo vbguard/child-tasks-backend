@@ -7,9 +7,10 @@ const deleteTask = (req, res) => {
   const userId = req.user._id;
   const taskId = req.params.taskId;
 
-  const sendResponse = () => {
+  const sendResponse = user => {
     res.json({
-      status: "success"
+      status: "success",
+      user
     });
   };
 
@@ -33,8 +34,8 @@ const deleteTask = (req, res) => {
           $pull: { tasks: taskId },
           $inc: { scores: -task.points }
         })
-          .then(() => {
-            return sendResponse;
+          .then(updatedUser => {
+            return sendResponse({ user: { scores: updatedUser.scores } });
           })
           .catch(err => {
             throw new ValidationError(err.message);
