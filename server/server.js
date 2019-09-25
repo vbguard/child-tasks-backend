@@ -64,6 +64,9 @@ const createServer = (app, PORT) => {
 
   app
     .use(express.static(path.join(__dirname, "../static")))
+    .get("/", express.static(path.join(__dirname, "../client"))
+    .get("/dashboard", express.static(path.join(__dirname, "../client"))
+    .get("/contacts", express.static(path.join(__dirname, "../client"))
     .use("/_next", express.static(path.resolve(__dirname, "../.next")))
     .use("/public", express.static(path.join(__dirname, "../public")))
     .use("/api", router)
