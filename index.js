@@ -32,6 +32,9 @@ nextjs
   })
   .then(() => {
     app
+      .get("/", express.static('client'))
+      .get("/dashboard", express.static('client'))
+      .get("/contacts", express.static('client'))
       .get("/auth", (req, res) => {
         return nextjs.render(req, res, "auth");
       })
