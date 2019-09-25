@@ -46,10 +46,10 @@ const updateTask = (req, res) => {
   const { taskId } = req.params;
   const validData = result.value;
 
-  const sendResponse = task => {
+  const sendResponse = data => {
     res.json({
       status: "success",
-      ...task
+      ...data
     });
   };
 
@@ -75,9 +75,9 @@ const updateTask = (req, res) => {
         sendError({ message: "no such task" });
         return;
       }
-      
+
       if (req.body.isComplete) {
-        User.findOneAndUpdate(
+        return User.findOneAndUpdate(
           { _id: userId },
           { $inc: { scores: task.points } },
           { new: true }
@@ -91,8 +91,10 @@ const updateTask = (req, res) => {
           .catch(err => {
             throw new Error(err);
           });
-      } else {
-        User.findOneAndUpdate(
+      } 
+
+      if (!req.body.isComplete) {
+        return User.findOneAndUpdate(
           { _id: userId },
           { $inc: { scores: -task.points } },
           { new: true }
@@ -108,7 +110,9 @@ const updateTask = (req, res) => {
           });
       }
 
-      return sendResponse(task.getPublicFields());
+      if (!Object.keys(req.body).includes('isComplete')) {
+        sendResponse(task.getPublicFields());
+      }
     })
     .catch(err => {
       throw new ValidationError(err.message);
