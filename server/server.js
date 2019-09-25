@@ -73,7 +73,7 @@ const createServer = (app, PORT) => {
     .use(
       "/doc",
       swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument, { customeSiteTitle: "Task Manager" })
+      swaggerUi.setup(swaggerDocument, { customSiteTitle: "GoToGoal" })
     )
 
     // add error handlers

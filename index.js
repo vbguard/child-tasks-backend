@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const config = require("./config/config");
-// const path = require("path");
+const path = require("path");
 const next = require("next");
 const chalk = require("chalk");
 
@@ -32,6 +32,9 @@ nextjs
   })
   .then(() => {
     app
+      .get('/', express.static('client'))
+      .get("/dashboard", express.static(path.join(__dirname, "client")))
+     .get("/contacts", express.static(path.join(__dirname, "client")))
       .get("/auth", (req, res) => {
         return nextjs.render(req, res, "auth");
       })
