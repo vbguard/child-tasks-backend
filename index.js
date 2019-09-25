@@ -32,9 +32,6 @@ nextjs
   })
   .then(() => {
     app
-      .get('/', express.static('client'))
-      .get("/dashboard", express.static(path.join(__dirname, "client")))
-     .get("/contacts", express.static(path.join(__dirname, "client")))
       .get("/auth", (req, res) => {
         return nextjs.render(req, res, "auth");
       })

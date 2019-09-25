@@ -63,10 +63,9 @@ const createServer = (app, PORT) => {
   require("./services/passport")(passport);
 
   app
-    .use("/image", express.static(path.join(__dirname, "../static")))
-    .get("/", express.static(path.join(__dirname, "../client")))
-    .get("/dashboard", express.static(path.join(__dirname, "../client")))
-    .get("/contacts", express.static(path.join(__dirname, "../client")))
+    .use("/", express.static(path.join(__dirname, "../static")))
+    .get("/dashboard", express.static(path.join(__dirname, "../static")))
+    .get("/contacts", express.static(path.join(__dirname, "../static")))
     .use("/_next", express.static(path.resolve(__dirname, "../.next")))
     .use("/public", express.static(path.join(__dirname, "../public")))
     .use("/api", router)
