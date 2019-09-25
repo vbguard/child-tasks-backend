@@ -93,7 +93,7 @@ const updateTask = (req, res) => {
           });
       } 
 
-      if (!req.body.isComplete) {
+      if (!req.body.isComplete && Object.key(req.body).includes('isComplete')) {
         return User.findOneAndUpdate(
           { _id: userId },
           { $inc: { scores: -task.points } },
