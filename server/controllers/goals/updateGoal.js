@@ -69,7 +69,7 @@ const updateGoal = (req, res) => {
           { new: true }
         )
           .then(updatedUser => {
-            sendError({
+            sendResponse({
               user: { scores: updatedUser.scores },
               message: "Goal completed!!!"
             });
@@ -78,7 +78,7 @@ const updateGoal = (req, res) => {
             throw new Error(err);
           });
       }
-      
+
       return sendResponse(goal.getPublicFields());
     })
     .catch(err => {
