@@ -20,8 +20,8 @@ const onError = require("./core/onError");
 
 // middleware
 // const validationErrorHandler = require("./middleware/validation-error-handler");
-// const errorHandler = require("./middleware/error-handler");
-// const notFound = require("./middleware/not-found");
+const errorHandler = require("./middleware/error-handler");
+const notFound = require("./middleware/not-found");
 
 const router = require("./routes/routes.js");
 // const ssrRoutes = require("./routes/ssrRoutes.js");
@@ -63,12 +63,13 @@ const createServer = (app, PORT) => {
   require("./services/passport")(passport);
 
   app
-    .use("/image", express.static(path.join(__dirname, "../static")))
-    .get("/", express.static(path.join(__dirname, "../client")))
-    .get("/dashboard", express.static(path.join(__dirname, "../client")))
-    .get("/contacts", express.static(path.join(__dirname, "../client")))
-    .use("/_next", express.static(path.resolve(__dirname, "../.next")))
-    .use("/public", express.static(path.join(__dirname, "../public")))
+    // .get('/', (req, res) => {
+    //     res.send("<h1>WOrk</h1>")
+    //   })
+    // .use("/", express.static(path.join(__dirname, "../client")))
+    // .use("/dashboard", express.static(path.join(__dirname, "../client")))
+    // .use("/contacts", express.static(path.join(__dirname, "../client")))
+    .use("/", express.static(path.resolve(__dirname, "../static")))
     .use("/api", router)
     .use(
       "/doc",
@@ -81,14 +82,10 @@ const createServer = (app, PORT) => {
       if (err instanceof ValidationError) {
         return res.status(400).json({ status: "error", message: err.message });
       }
-      next(err);
-    })
-
-    .use((err, req, res) => {
-      res.status(500).json({ error: err, message: err.message });
+      return next(err);
     })
     // .use(validationErrorHandler)
-    // .use(errorHandler)
+    .use(errorHandler)
 
     .listen(PORT, () => {
       if (isdev) {
