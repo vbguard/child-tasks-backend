@@ -21,7 +21,7 @@ const onError = require("./core/onError");
 // middleware
 // const validationErrorHandler = require("./middleware/validation-error-handler");
 const errorHandler = require("./middleware/error-handler");
-const notFound = require("./middleware/not-found");
+// const notFound = require("./middleware/not-found");
 
 const router = require("./routes/routes.js");
 // const ssrRoutes = require("./routes/ssrRoutes.js");
@@ -63,13 +63,11 @@ const createServer = (app, PORT) => {
   require("./services/passport")(passport);
 
   app
-    // .get('/', (req, res) => {
-    //     res.send("<h1>WOrk</h1>")
-    //   })
-    // .use("/", express.static(path.join(__dirname, "../client")))
-    // .use("/dashboard", express.static(path.join(__dirname, "../client")))
-    // .use("/contacts", express.static(path.join(__dirname, "../client")))
-    .use("/", express.static(path.resolve(__dirname, "../static")))
+    .use("/", express.static(path.join(__dirname, "../static")))
+    .get("/dashboard", express.static(path.join(__dirname, "../static")))
+    .get("/contacts", express.static(path.join(__dirname, "../static")))
+    .use("/_next", express.static(path.resolve(__dirname, "../.next")))
+    .use("/public", express.static(path.join(__dirname, "../public")))
     .use("/api", router)
     .use(
       "/doc",
