@@ -5,7 +5,8 @@ const {
   deleteTask,
   getAllUserTasks,
   getTaskById,
-  updateTask
+  updateTask,
+  toggleTask
 } = require("../controllers/tasks/index");
 
 router
@@ -13,6 +14,7 @@ router
   .get("/:taskId", getTaskById)
   .post("/", createTask)
   .patch("/:taskId", updateTask)
-  .delete("/:taskId", deleteTask);
+  .delete("/:taskId", deleteTask)
+  .patch("/toggle/:taskId", toggleTask);
 
 module.exports = router;

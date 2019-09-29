@@ -20,7 +20,7 @@ const onError = require("./core/onError");
 
 // middleware
 // const validationErrorHandler = require("./middleware/validation-error-handler");
-// const errorHandler = require("./middleware/error-handler");
+const errorHandler = require("./middleware/error-handler");
 // const notFound = require("./middleware/not-found");
 
 const router = require("./routes/routes.js");
@@ -80,14 +80,10 @@ const createServer = (app, PORT) => {
       if (err instanceof ValidationError) {
         return res.status(400).json({ status: "error", message: err.message });
       }
-      next(err);
-    })
-
-    .use((err, req, res) => {
-      res.status(500).json({ error: err, message: err.message });
+      return next(err);
     })
     // .use(validationErrorHandler)
-    // .use(errorHandler)
+    .use(errorHandler)
 
     .listen(PORT, () => {
       if (isdev) {

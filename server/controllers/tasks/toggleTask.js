@@ -6,8 +6,8 @@ const Joi = require("joi");
 
 const updateTask = (req, res) => {
   const userId = req.user.id;
-  // const isDone = req.body.isDone;
-  // const inActive = req.body.inActive;
+  const isDone = req.body.isDone;
+  const inActive = req.body.inActive;
 
   const schema = Joi.object()
     .keys({
@@ -78,25 +78,25 @@ const updateTask = (req, res) => {
         return;
       }
 
-      if (Object.keys(req.body).includes("isComplete")) {
-        if (req.body.isComplete) {
-          return User.findOneAndUpdate(
-            { _id: userId },
-            { $inc: { scores: task.points } },
-            { new: true }
-          )
-            .then(updatedUser => {
-              return sendResponse({
-                task: task.getPublicFields(),
-                user: { scores: updatedUser.scores }
-              });
-            })
-            .catch(err => {
-              throw new Error(err);
+      if (req.body.isComplete) {
+        return User.findOneAndUpdate(
+          { _id: userId },
+          { $inc: { scores: task.points } },
+          { new: true }
+        )
+          .then(updatedUser => {
+            return sendResponse({
+              task: task.getPublicFields(),
+              user: { scores: updatedUser.scores }
             });
-        }
+          })
+          .catch(err => {
+            throw new Error(err);
+          });
+      }
 
-        if (!req.body.isComplete) {
+      if (!req.body.isComplete) {
+        if (!isDone && inActive) {
           return User.findOneAndUpdate(
             { _id: userId },
             { $inc: { scores: -task.points } },
@@ -114,7 +114,9 @@ const updateTask = (req, res) => {
         }
       }
 
-      sendResponse(task.getPublicFields());
+      if (!Object.keys(req.body).includes("isComplete")) {
+        sendResponse(task.getPublicFields());
+      }
     })
     .catch(err => {
       throw new ValidationError(err.message);

@@ -1,24 +1,29 @@
 require("dotenv").config();
 const express = require("express");
 const config = require("./config/config");
-const path = require("path");
-const next = require("next");
-const chalk = require("chalk");
+// const path = require("path");
+// const next = require("next");
+// const chalk = require("chalk");
 
-require('./server/lib/cron');
+require("./server/lib/cron");
 
 const createServer = require("./server/server");
 const connectToDB = require("./config/mongodb");
 
 const PORT = config.PORT;
 const DATABASE_URL = config.mongoURL;
-const isdev = process.env.NODE_ENV !== "production";
+// const isdev = process.env.NODE_ENV !== "production";
 
-const nextjs = next({ isdev });
-const handle = nextjs.getRequestHandler();
+// const nextjs = next({ isdev });
+// const handle = nextjs.getRequestHandler();
 
 const app = express();
 
+<<<<<<< HEAD
+createServer(app, PORT);
+connectToDB(DATABASE_URL);
+
+=======
 nextjs
   .prepare()
   .then(async () => {
@@ -49,3 +54,4 @@ nextjs
     console.error(chalk.red(err));
     throw new Error(err);
   });
+>>>>>>> 93a1c6b004d76470358bfd9c9ab12ad151baaa78
